@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -56,6 +57,12 @@ public class RootController implements Initializable {
     @FXML
     private VBox emptyBox;
 
+    @FXML
+    private BorderPane placeholderPane;
+
+    @FXML
+    private Label friendsCountLabel;
+
     public RootController() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/RootView.fxml"));
@@ -74,11 +81,12 @@ public class RootController implements Initializable {
         friendsList.itemsProperty().bind(friends);
         selectedFriend.bind(friendsList.getSelectionModel().selectedItemProperty());
         enemyButton.disableProperty().bind(selectedFriend.isNull());
-        root.centerProperty().bind(
+        placeholderPane.centerProperty().bind(
                 Bindings.when(selectedFriend.isNotNull())
                         .then((Pane)friendController.getRoot())
                         .otherwise(emptyBox)
         );
+        friendsCountLabel.textProperty().bind(friends.sizeProperty().asString());
 
         friendController.friendProperty().bind(selectedFriend);
 
